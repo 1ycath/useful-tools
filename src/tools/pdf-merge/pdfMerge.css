@@ -1,0 +1,78 @@
+.coral { color: #c95e3d; background: #fff0e9; }
+
+.pdf-merge-page { width: min(900px, calc(100% - 36px)); }
+.pdf-merge-panel { padding: clamp(28px, 5vw, 48px); text-align: left; }
+.pdf-merge-panel .panel-heading { margin-bottom: 28px; }
+
+.pdf-privacy-note {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 13px 16px;
+  border: 1px solid #cfe7dd;
+  border-radius: 14px;
+  color: #236d59;
+  background: #eef8f4;
+}
+.pdf-privacy-note > span { width: 32px; height: 32px; display: grid; place-items: center; flex: 0 0 32px; border-radius: 10px; background: #d9eee7; font-weight: 700; }
+.pdf-privacy-note strong, .pdf-privacy-note small { display: block; }
+.pdf-privacy-note strong { font-size: 13px; }
+.pdf-privacy-note small { margin-top: 2px; color: #568276; font-size: 11px; }
+
+.pdf-drop-zone {
+  display: grid;
+  justify-items: center;
+  padding: clamp(34px, 7vw, 58px) 22px;
+  border: 2px dashed #d6d1c7;
+  border-radius: 22px;
+  background: #faf9f5;
+  text-align: center;
+  transition: border-color .2s, background .2s, transform .2s;
+}
+.pdf-drop-zone.dragging { border-color: #c95e3d; background: #fff5f0; transform: scale(.995); }
+.pdf-drop-icon { width: 58px; height: 58px; display: grid; place-items: center; border-radius: 18px; color: #c95e3d; background: #fff0e9; font-size: 30px; }
+.pdf-drop-zone h2 { margin: 18px 0 6px; color: #3f3b35; font-size: 20px; }
+.pdf-drop-zone p { margin: 0 0 20px; color: #97938b; font-size: 13px; }
+.visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
+.pdf-select-button, .pdf-merge-button, .pdf-download-button {
+  min-height: 50px;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.pdf-select-button { padding: 0 24px; color: #70452f; background: #f2e9e3; }
+.pdf-select-button:hover { background: #eadbd2; }
+
+.pdf-file-section { margin-top: 26px; }
+.pdf-file-heading { min-height: 36px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.pdf-file-heading h2 { margin: 0; font-size: 14px; }
+.pdf-file-heading button { padding: 8px; border: 0; color: #7454d0; background: none; cursor: pointer; font-size: 12px; font-weight: 700; }
+.pdf-file-list { display: grid; gap: 10px; margin: 10px 0 0; padding: 0; list-style: none; counter-reset: pdf-file; }
+.pdf-file-list li { min-width: 0; display: flex; align-items: center; gap: 12px; padding: 13px 14px; border: 1px solid #e3dfd6; border-radius: 15px; background: #fff; }
+.pdf-order { width: 24px; flex: 0 0 24px; color: #a09b92; font-size: 12px; font-weight: 700; text-align: center; }
+.pdf-file-mark { width: 43px; height: 43px; display: grid; place-items: center; flex: 0 0 43px; border-radius: 11px; color: #c5543a; background: #fff0e9; font-size: 10px; font-weight: 800; }
+.pdf-file-info { min-width: 0; flex: 1; }
+.pdf-file-info strong, .pdf-file-info small { display: block; }
+.pdf-file-info strong { overflow: hidden; color: #46423c; font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+.pdf-file-info small { margin-top: 4px; color: #a29e96; font-size: 11px; }
+.pdf-file-list li > button { min-height: 40px; padding: 0 10px; border: 0; color: #9a6658; background: transparent; cursor: pointer; font-size: 12px; }
+
+.pdf-status { min-height: 20px; margin: 18px 0; color: #8f8a81; font-size: 12px; text-align: center; }
+.pdf-status.error { color: #c55747; }
+.pdf-status.success { color: #238167; }
+.pdf-actions { display: grid; gap: 12px; }
+.pdf-merge-button, .pdf-download-button { width: 100%; display: flex; align-items: center; justify-content: center; padding: 0 26px; color: white; background: #c65b3c; box-shadow: 0 12px 26px rgba(198,91,60,.24); }
+.pdf-merge-button:disabled { color: #aaa59c; background: #e8e5de; box-shadow: none; cursor: not-allowed; }
+.pdf-download-button { min-height: 58px; flex-direction: column; background: #238167; box-shadow: 0 12px 26px rgba(35,129,103,.22); }
+.pdf-download-button small { margin-top: 2px; opacity: .75; font-size: 10px; font-weight: 500; }
+
+@media (max-width: 640px) {
+  .pdf-merge-page { width: min(100% - 24px, 900px); }
+  .pdf-merge-panel { padding: 24px 16px 28px; }
+  .pdf-drop-zone { padding: 32px 15px; border-radius: 18px; }
+  .pdf-file-list li { gap: 9px; padding: 11px 9px; }
+  .pdf-order { width: 18px; flex-basis: 18px; }
+  .pdf-file-mark { width: 38px; height: 38px; flex-basis: 38px; }
+}

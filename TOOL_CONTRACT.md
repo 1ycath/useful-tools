@@ -13,18 +13,23 @@
 5. 页面在 320px 至桌面宽度下无横向滚动或内容遮挡。
 6. `npm run build` 成功完成。
 
-## 2. 当前项目入口
+## 2. 当前项目结构与职责
 
-- 应用与路由：`src/App.jsx`
+- 应用入口与顶层 Provider：`src/App.jsx`
+- 路由注册：`src/routes/AppRoutes.jsx`
+- 公共侧边栏与内容出口：`src/layouts/MainLayout.jsx`
+- 首页：`src/pages/HomePage.jsx`
+- 工具元数据：`src/tools/toolRegistry.js`
+- 工具实现：`src/tools/<tool-name>/<ToolName>Tool.jsx`
 - 全局样式：`src/styles.css`
 - React 入口：`src/main.jsx`
 - 构建配置：`vite.config.js`
 
-项目当前使用 `react-router-dom` 的 `BrowserRouter`。新增工具不要自行操作 `window.location`，统一使用 `<Link>` 和 `<Route>`。
+项目使用 `react-router-dom` 的 `BrowserRouter`，由 `App.jsx` 统一提供。新增工具不要自行创建 Router 或操作 `window.location`，统一使用 `<Link>`、`<NavLink>` 和 `<Route>`。
 
 ## 3. 工具元数据契约
 
-在 `Home` 组件的 `tools` 数组中添加一项：
+在 `src/tools/toolRegistry.js` 的 `tools` 数组中添加一项。首页卡片和公共侧边栏都从此处读取，禁止在页面内重复维护工具清单：
 
 ```jsx
 {
@@ -44,7 +49,18 @@
 - 描述尽量控制在 30 个汉字内。
 - 新主题色需要同时提供浅色背景和高对比度文字颜色。
 
-## 4. 工具页面契约
+## 4. 工具目录与页面契约
+
+每个工具必须拥有独立目录，状态、校验、定时器、请求和其他业务逻辑只能保留在自己的工具组件或同目录模块中：
+
+```text
+src/tools/example/
+├── ExampleTool.jsx
+├── example.css       # 可选；仅包含工具私有样式
+└── helpers.js        # 可选；仅包含工具私有逻辑
+```
+
+工具之间禁止直接导入彼此的内部文件。真正需要共享的代码应提升到 `src/components/`、`src/hooks/` 或 `src/utils/`。
 
 工具组件至少采用以下结构：
 
@@ -52,7 +68,6 @@
 function ExampleTool() {
   return (
     <main className="tool-page">
-      <BackLink />
       <section className="tool-panel">
         <div className="panel-heading">
           <div className="tool-icon blue">◇</div>
@@ -69,13 +84,13 @@ function ExampleTool() {
 }
 ```
 
-然后在 `App` 的 `Routes` 内注册：
+然后在 `src/routes/AppRoutes.jsx` 的 `MainLayout` 子路由内注册：
 
 ```jsx
-<Route path="/example" element={<ExampleTool />} />
+<Route path="example" element={<ExampleTool />} />
 ```
 
-必须复用 `.tool-page`、`.tool-panel`、`.panel-heading`、`.tool-icon` 和 `<BackLink />`，以维持页面结构一致。工具特有样式使用有含义的前缀，例如 `.converter-result`，避免覆盖其他工具。
+必须复用 `.tool-page`、`.tool-panel`、`.panel-heading` 和 `.tool-icon`，以维持页面结构一致。侧边栏、返回大厅导航和内容区域由 `MainLayout` 提供，工具组件不得重复实现。工具特有样式使用有含义的前缀，例如 `.converter-result`，避免覆盖其他工具。
 
 ## 5. 交互与状态约定
 
@@ -86,6 +101,7 @@ function ExampleTool() {
 - “重置”应恢复工具的初始状态，而不是刷新页面。
 - 异步操作应提供进行中状态，并防止重复提交。
 - 不把工具状态挂在全局，除非多个页面确实需要共享。
+- 不在 `App.jsx`、`AppRoutes.jsx`、`MainLayout.jsx` 或 `HomePage.jsx` 中实现工具业务逻辑。
 
 ## 6. 移动端与可访问性约定
 
@@ -102,7 +118,7 @@ function ExampleTool() {
 接入后逐项检查：
 
 - [ ] 从大厅能进入新工具，URL 正确。
-- [ ] 返回链接能回到大厅。
+- [ ] 公共侧边栏能返回大厅，并能进入各工具。
 - [ ] 正常输入、空输入、非法输入和边界值行为正确。
 - [ ] 在 320px、390px、640px 和桌面宽度下检查布局。
 - [ ] 键盘可以访问输入框和所有按钮。

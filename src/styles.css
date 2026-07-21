@@ -6,6 +6,14 @@ html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; min-width: 320px; min-height: 100vh; overflow-x: hidden; background: radial-gradient(circle at 85% 5%, #ebe5ff 0, transparent 24rem), #f5f4ee; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; }
+.app-shell { min-height: 100vh; display: grid; grid-template-columns: 240px minmax(0, 1fr); }
+.main-sidebar { height: 100vh; position: sticky; top: 0; display: flex; flex-direction: column; gap: 34px; padding: 28px 22px; border-right: 1px solid #e0ded6; background: rgba(250,249,245,.82); backdrop-filter: blur(16px); }
+.sidebar-brand { display: flex; align-items: center; gap: 11px; font-size: 18px; font-weight: 700; }
+.sidebar-nav { display: grid; gap: 7px; }
+.sidebar-nav a { min-height: 46px; display: flex; align-items: center; gap: 11px; padding: 0 13px; border-radius: 12px; color: #77736c; font-size: 14px; font-weight: 600; transition: color .2s, background .2s; }
+.sidebar-nav a > span { width: 24px; color: #7053da; text-align: center; font-size: 18px; }
+.sidebar-nav a:hover, .sidebar-nav a.active { color: #583ebd; background: #ebe5fb; }
+.main-content { min-width: 0; }
 .home-shell { width: min(1120px, calc(100% - 40px)); min-height: 100vh; margin: auto; display: flex; flex-direction: column; }
 .brand { display: flex; align-items: center; gap: 11px; height: 88px; font-size: 18px; font-weight: 700; letter-spacing: -.3px; }
 .brand-mark { width: 34px; height: 34px; display: grid; place-items: center; color: white; background: #6c4de6; border-radius: 10px; transform: rotate(-5deg); box-shadow: 0 8px 18px #6c4de638; }
@@ -38,7 +46,7 @@ footer { margin-top: auto; padding: 58px 0 30px; color: #aaa7a0; font-size: 12px
 .back-link { display: inline-flex; gap: 10px; align-items: center; color: #6f6c66; font-size: 14px; transition: color .2s; }
 .back-link:hover { color: #5d43c6; }
 .back-link span { font-size: 20px; }
-.tool-panel { margin-top: 55px; padding: clamp(28px, 6vw, 60px); border: 1px solid #e0ded6; border-radius: 30px; background: rgba(255,255,255,.84); box-shadow: 0 28px 65px rgba(61, 53, 40, .09); text-align: center; }
+.tool-panel { margin-top: 30px; padding: clamp(28px, 6vw, 60px); border: 1px solid #e0ded6; border-radius: 30px; background: rgba(255,255,255,.84); box-shadow: 0 28px 65px rgba(61, 53, 40, .09); text-align: center; }
 .panel-heading { display: flex; align-items: center; gap: 18px; text-align: left; }
 .panel-heading h1 { margin: 4px 0 0; font-size: 30px; letter-spacing: -1px; }
 .counter-display { max-width: 100%; margin: 70px 0 50px; font-size: clamp(72px, 19vw, 150px); font-weight: 600; line-height: 1; letter-spacing: -.06em; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
@@ -103,12 +111,22 @@ footer { margin-top: auto; padding: 58px 0 30px; color: #aaa7a0; font-size: 12px
 .chat-composer-meta { display: flex; justify-content: space-between; gap: 12px; margin-top: 7px; color: #aaa69e; font-size: 10px; }
 .chat-composer-meta .error { color: #d65f51; }
 @media (max-width: 900px) {
+  .app-shell { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
+  .main-sidebar { z-index: 10; width: 100%; height: auto; position: sticky; padding: 12px 18px; flex-direction: row; align-items: center; gap: 20px; overflow: hidden; border-right: 0; border-bottom: 1px solid #e0ded6; }
+  .sidebar-brand > span:last-child { display: none; }
+  .sidebar-nav { min-width: 0; display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; }
+  .sidebar-nav::-webkit-scrollbar { display: none; }
+  .sidebar-nav a { min-width: max-content; min-height: 42px; padding: 0 12px; }
   .tool-grid { grid-template-columns: repeat(2, 1fr); }
   .coming-soon { grid-column: 1 / -1; min-height: 190px; }
   .chat-panel { padding: 26px; }
   .chat-workspace { grid-template-columns: 210px minmax(0, 1fr); }
 }
 @media (max-width: 640px) {
+  .main-sidebar { padding: 10px 12px; gap: 10px; }
+  .brand-mark { width: 32px; height: 32px; }
+  .sidebar-nav a { min-height: 40px; font-size: 13px; }
+  .sidebar-nav a > span { display: none; }
   .home-shell { width: min(100% - 28px, 1120px); }
   .brand { height: 70px; }
   .hero { padding: 38px 2px 36px; }
