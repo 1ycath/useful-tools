@@ -4,4 +4,5 @@ export const tools = [
   { path: '/random', icon: '⌁', className: 'green', title: '随机整数', description: '设置数字范围，快速生成一个随机整数。', tag: '数字' },
   { path: '/perfectly-normal-ai', icon: '✦', className: 'blue', title: '完全正常的 AI 对话', description: '认真接住每一个值得探讨的问题。', tag: '对话' },
   { path: '/pdf-merge', icon: '▱', className: 'coral', title: 'PDF 合并', description: '拖拽两个本地 PDF，安全合并并下载。', tag: '文档' },
+  { path: '/file-storage', icon: '▤', className: 'blue', title: '文件存储', description: '在私有 OSS 中管理文件与文件夹。', tag: '存储' },
 ]

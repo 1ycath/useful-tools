@@ -8,6 +8,7 @@ import RandomIntegerTool from '../tools/random-integer/RandomIntegerTool'
 import TimerTool from '../tools/timer/TimerTool'
 
 const PdfMergeTool = lazy(() => import('../tools/pdf-merge/PdfMergeTool'))
+const FileStorageTool = lazy(() => import('../tools/file-storage/FileStorageTool'))
 
 function AppRoutes() {
   return (
@@ -21,6 +22,11 @@ function AppRoutes() {
         <Route path="pdf-merge" element={(
           <Suspense fallback={<main className="tool-page"><section className="tool-panel">正在加载 PDF 合并工具…</section></main>}>
             <PdfMergeTool />
+          </Suspense>
+        )} />
+        <Route path="file-storage" element={(
+          <Suspense fallback={<main className="tool-page"><section className="tool-panel">正在加载文件存储工具…</section></main>}>
+            <FileStorageTool />
           </Suspense>
         )} />
         <Route path="*" element={<Navigate replace to="/" />} />
