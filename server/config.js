@@ -1,8 +1,8 @@
 import dotenv from 'dotenv'
 
-dotenv.config({ path: ['.env.local', '.env'], quiet: true })
+dotenv.config({ path: ['.env.ocr.local', '.env.local', '.env'], quiet: true })
 
-const requiredVariables = [
+const requiredOssVariables = [
   'ALIYUN_OSS_REGION',
   'ALIYUN_OSS_BUCKET',
   'ALIYUN_OSS_ENDPOINT',
@@ -11,7 +11,7 @@ const requiredVariables = [
 ]
 
 export function getOssConfig() {
-  const missing = requiredVariables.filter((name) => !process.env[name]?.trim())
+  const missing = requiredOssVariables.filter((name) => !process.env[name]?.trim())
 
   if (missing.length > 0) {
     throw new Error(`缺少服务端 OSS 环境变量：${missing.join(', ')}`)
@@ -24,5 +24,28 @@ export function getOssConfig() {
     accessKeyId: process.env.ALIYUN_ACCESS_KEY_ID.trim(),
     accessKeySecret: process.env.ALIYUN_ACCESS_KEY_SECRET.trim(),
     secure: true,
+  }
+}
+
+export function getOcrConfig() {
+  const accessKeyId = process.env.ALIYUN_OCR_ACCESS_KEY_ID?.trim()
+    || process.env.ALIYUN_ACCESS_KEY_ID?.trim()
+  const accessKeySecret = process.env.ALIYUN_OCR_ACCESS_KEY_SECRET?.trim()
+    || process.env.ALIYUN_ACCESS_KEY_SECRET?.trim()
+  const missing = []
+  if (!accessKeyId) missing.push('ALIYUN_OCR_ACCESS_KEY_ID')
+  if (!accessKeySecret) missing.push('ALIYUN_OCR_ACCESS_KEY_SECRET')
+
+  if (missing.length > 0) {
+    const error = new Error(`缺少服务端 OCR 环境变量：${missing.join(', ')}`)
+    error.status = 503
+    error.code = 'OCR_NOT_CONFIGURED'
+    throw error
+  }
+
+  return {
+    accessKeyId,
+    accessKeySecret,
+    endpoint: process.env.ALIYUN_OCR_ENDPOINT?.trim() || 'ocr-api.cn-hangzhou.aliyuncs.com',
   }
 }
