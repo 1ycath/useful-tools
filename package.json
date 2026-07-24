@@ -8,6 +8,7 @@
     "dev:web": "vite",
     "dev:api": "node --watch server/index.js",
     "start": "node server/index.js",
+    "test": "node --test",
     "lint": "eslint .",
     "build": "vite build",
     "preview": "vite preview"

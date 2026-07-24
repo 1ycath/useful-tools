@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { fileTypeFromBuffer } from 'file-type'
 import multer from 'multer'
+import { randomUUID } from 'node:crypto'
 import { recognizeImage } from './ocrService.js'
 
 const MAX_IMAGE_SIZE = 4 * 1024 * 1024
@@ -35,6 +36,10 @@ const route = (handler) => async (request, response, next) => {
 }
 
 router.post('/recognize', upload.single('image'), route(async (request, response) => {
+  const operationId = randomUUID()
+  request.ocrOperationId = operationId
+  response.setHeader('x-ocr-operation-id', operationId)
+
   if (!request.file?.buffer?.length) {
     throw createRequestError('请选择非空图片', 'OCR_EMPTY_FILE')
   }
@@ -44,7 +49,13 @@ router.post('/recognize', upload.single('image'), route(async (request, response
     throw createRequestError('仅支持 PNG、JPG、BMP、GIF、TIFF 和 WebP 图片', 'OCR_UNSUPPORTED_FILE')
   }
 
-  response.json(await recognizeImage(request.file.buffer))
+  response.json(await recognizeImage(request.file.buffer, {
+    operationId,
+    vercelId: request.headers['x-vercel-id'],
+    host: request.headers.host,
+    mimeType: detectedType.mime,
+    bytes: request.file.buffer.length,
+  }))
 }))
 
 export default router

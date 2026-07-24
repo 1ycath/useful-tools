@@ -19,7 +19,13 @@ app.use((error, _request, response, _next) => {
     : (error.message || '请求失败')
   const code = isFileTooLarge ? 'OCR_FILE_TOO_LARGE' : error.code
 
-  console.error(isOcrRequest ? '[ocr-api]' : '[storage-api]', error.name, code || status, message)
+  console.error(
+    isOcrRequest ? '[ocr-api]' : '[storage-api]',
+    error.name,
+    code || status,
+    message,
+    ...(_request.ocrOperationId ? [`operationId=${_request.ocrOperationId}`] : []),
+  )
   response.status(status).json({ error: message, ...(code ? { code } : {}) })
 })
 

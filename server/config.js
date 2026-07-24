@@ -43,9 +43,32 @@ export function getOcrConfig() {
     throw error
   }
 
+  const getIntegerOption = (name, fallback, minimum, maximum) => {
+    const rawValue = process.env[name]?.trim()
+    if (!rawValue) return fallback
+
+    const value = Number(rawValue)
+    if (!Number.isInteger(value) || value < minimum || value > maximum) {
+      const error = new Error(
+        `OCR 环境变量 ${name} 必须是 ${minimum} 到 ${maximum} 之间的整数`,
+      )
+      error.status = 503
+      error.code = 'OCR_INVALID_CONFIGURATION'
+      throw error
+    }
+
+    return value
+  }
+
   return {
     accessKeyId,
     accessKeySecret,
     endpoint: process.env.ALIYUN_OCR_ENDPOINT?.trim() || 'ocr-api.cn-hangzhou.aliyuncs.com',
+    connectTimeout: getIntegerOption('ALIYUN_OCR_CONNECT_TIMEOUT_MS', 8000, 1000, 30000),
+    readTimeout: getIntegerOption('ALIYUN_OCR_READ_TIMEOUT_MS', 50000, 5000, 120000),
+    maxAttempts: getIntegerOption('ALIYUN_OCR_MAX_ATTEMPTS', 3, 1, 4),
+    maxConcurrency: getIntegerOption('ALIYUN_OCR_MAX_CONCURRENCY', 2, 1, 10),
+    retryBaseDelay: getIntegerOption('ALIYUN_OCR_RETRY_BASE_DELAY_MS', 250, 50, 5000),
+    retryMaxDelay: getIntegerOption('ALIYUN_OCR_RETRY_MAX_DELAY_MS', 2000, 100, 10000),
   }
 }
