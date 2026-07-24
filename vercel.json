@@ -2,7 +2,8 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
     "api/ocr/recognize.js": {
-      "maxDuration": 180
+      "maxDuration": 180,
+      "regions": ["hkg1"]
     }
   },
   "routes": [
