@@ -108,6 +108,7 @@
 
 .ocr-select-button,
 .ocr-start-button,
+.ocr-export-button,
 .ocr-download-button {
   min-height: 50px;
   border: 0;
@@ -128,6 +129,7 @@
 
 .ocr-select-button:disabled,
 .ocr-start-button:disabled,
+.ocr-export-button:disabled,
 .ocr-download-button:disabled {
   cursor: not-allowed;
   opacity: .55;
@@ -447,20 +449,40 @@
   background: #f7f6f1;
 }
 
+.ocr-export-actions {
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) minmax(150px, 1fr) minmax(280px, 2.2fr);
+  gap: 12px;
+  margin-top: 13px;
+}
+
+.ocr-export-button,
 .ocr-download-button {
-  width: 100%;
   min-height: 62px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  margin-top: 13px;
   padding: 8px 26px;
   color: white;
+}
+
+.ocr-export-button.copy {
+  background: #238e72;
+  box-shadow: 0 12px 26px rgba(35,142,114,.18);
+}
+
+.ocr-export-button.text {
+  background: #4c7f91;
+  box-shadow: 0 12px 26px rgba(76,127,145,.18);
+}
+
+.ocr-download-button {
   background: #5e47bd;
   box-shadow: 0 12px 26px rgba(94,71,189,.22);
 }
 
+.ocr-export-button small,
 .ocr-download-button small {
   margin-top: 2px;
   opacity: .75;
@@ -517,6 +539,14 @@
     grid-column: 3;
     grid-row: 2;
   }
+
+  .ocr-export-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ocr-download-button {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (max-width: 430px) {
@@ -534,6 +564,7 @@
   }
 
   .ocr-start-button,
+  .ocr-export-button,
   .ocr-download-button {
     min-height: 56px;
   }

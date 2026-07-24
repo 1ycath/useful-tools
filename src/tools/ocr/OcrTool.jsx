@@ -356,6 +356,52 @@ function OcrTool() {
     setMessageType(succeeded ? 'success' : 'error')
   }
 
+  const copyCombinedText = async () => {
+    if (!combinedText) return
+
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(combinedText)
+      } else {
+        const textarea = document.createElement('textarea')
+        textarea.value = combinedText
+        textarea.setAttribute('readonly', '')
+        textarea.style.position = 'fixed'
+        textarea.style.opacity = '0'
+        document.body.append(textarea)
+        textarea.select()
+        const copied = document.execCommand('copy')
+        textarea.remove()
+        if (!copied) throw new Error('copy failed')
+      }
+
+      setMessage('已复制合并全文。')
+      setMessageType('success')
+    } catch {
+      setMessage('复制失败，请在合并全文文本框中手动复制。')
+      setMessageType('error')
+    }
+  }
+
+  const downloadText = () => {
+    if (!combinedText) return
+
+    const recognizedAt = completedAt ? new Date(completedAt) : new Date()
+    const datePart = recognizedAt.toISOString().slice(0, 10).replaceAll('-', '')
+    const blob = new Blob([`\uFEFF${combinedText}`], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `OCR识别结果-${datePart}.txt`
+    link.hidden = true
+    document.body.append(link)
+    link.click()
+    link.remove()
+    setTimeout(() => URL.revokeObjectURL(url), 0)
+    setMessage('TXT 文档已下载。')
+    setMessageType('success')
+  }
+
   const downloadWord = async () => {
     if (!successfulItems.length || isExporting) return
     setIsExporting(true)
@@ -567,15 +613,33 @@ function OcrTool() {
               readOnly
               aria-label="合并后的全部识别文本"
             />
-            <button
-              className="ocr-download-button"
-              type="button"
-              disabled={isExporting}
-              onClick={downloadWord}
-            >
-              {isExporting ? '正在生成 Word…' : '下载 Word 文档'}
-              <small>{successfulItems.length} 个图片分段 · .docx</small>
-            </button>
+            <div className="ocr-export-actions">
+              <button
+                className="ocr-export-button copy"
+                type="button"
+                onClick={copyCombinedText}
+              >
+                一键复制全文
+                <small>复制到剪贴板</small>
+              </button>
+              <button
+                className="ocr-export-button text"
+                type="button"
+                onClick={downloadText}
+              >
+                下载 TXT
+                <small>纯文本 · .txt</small>
+              </button>
+              <button
+                className="ocr-download-button"
+                type="button"
+                disabled={isExporting}
+                onClick={downloadWord}
+              >
+                {isExporting ? '正在生成 Word…' : '下载 Word 文档'}
+                <small>{successfulItems.length} 个图片分段 · .docx</small>
+              </button>
+            </div>
           </section>
         )}
       </section>
